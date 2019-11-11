@@ -15,18 +15,18 @@ namespace Vsite.Pood
                 return new int[0]; // vrati prazan niz
 
 
-            InicijalizirajSito(max);
+            InicijalizirajNizINtegera(max);
 
             // sito (ide do kvadratnog korijena maksimalnog broja)
 
-            Prosijaj();
-            return SakupiPrimBrojeve();
+            EliminirajVišekratnike();
+            return SakupiNeeliminiraneBrojeve();
              // vrati niz brojeva
 
 
         }
 
-        private static int[] SakupiPrimBrojeve()
+        private static int[] SakupiNeeliminiraneBrojeve()
         {
             // koliko je primbrojeva?
             int broj = 0;
@@ -48,19 +48,27 @@ namespace Vsite.Pood
             return primovi;
         }
 
-        private static void Prosijaj()
+        private static void EliminirajVišekratnike()
         {
-            for (int i = 2; i < Math.Sqrt(eliminirani.Length) + 1; ++i)
+            for (int i = 2; i < DajGornjuGranicuIteracije(); ++i)
             {
-                if (eliminirani[i]==false) // ako je i prekrižen, prekriži i višekratnike
-                {
-                    for (int j = 2 * i; j < eliminirani.Length ; j += i)
-                        eliminirani[j] = true; // višekratnik nije primbroj
-                }
+                if (eliminirani[i] == false) // ako je i prekrižen, prekriži i višekratnike                
+                    EliminirajVišekratnikeOd(i);
             }
         }
 
-        private static void InicijalizirajSito(int max)
+        private static int DajGornjuGranicuIteracije()
+        {
+            return (int)(Math.Sqrt(eliminirani.Length) + 1);
+        }
+
+        private static void EliminirajVišekratnikeOd(int i)
+        {
+            for (int j = 2 * i; j < eliminirani.Length; j += i)
+                eliminirani[j] = true; // višekratnik nije primbroj
+        }
+
+        private static void InicijalizirajNizINtegera(int max)
         {
             eliminirani = new bool [max + 1];
             
